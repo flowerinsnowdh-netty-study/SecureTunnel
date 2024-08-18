@@ -17,6 +17,9 @@ import javax.crypto.spec.SecretKeySpec;
  * <p>服务器端加密信息的编码器</p>
  */
 public class ServerSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> {
+    /**
+     * <p>会话</p>
+     */
     private final ServerSession session;
 
     /**

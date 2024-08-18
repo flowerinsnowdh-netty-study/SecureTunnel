@@ -18,10 +18,26 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * <p>客户端端解密信息的解码器</p>
+ */
 public class ClientSecureTunnelDecoder extends ByteToMessageDecoder {
+    /**
+     * <p>会话</p>
+     */
     @NotNull private final ClientSession session;
+
+    /**
+     * <p>数据包类型列表</p>
+     */
     @NotNull private final PacketList packetList;
 
+    /**
+     * <p>指定会话和数据包类型列表</p>
+     *
+     * @param session 会话
+     * @param packetList 数据包类型列表
+     */
     public ClientSecureTunnelDecoder(@NotNull ClientSession session, @NotNull PacketList packetList) {
         this.session = Objects.requireNonNull(session);
         this.packetList = Objects.requireNonNull(packetList);

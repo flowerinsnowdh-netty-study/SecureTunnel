@@ -23,7 +23,14 @@ import java.util.Objects;
  * <p>服务器端解密信息的解码器</p>
  */
 public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
+    /**
+     * <p>会话</p>
+     */
     @NotNull private final ServerSession session;
+
+    /**
+     * <p>数据包类型列表</p>
+     */
     @NotNull private final PacketList packetList;
 
     /**

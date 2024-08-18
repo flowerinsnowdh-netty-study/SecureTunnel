@@ -13,9 +13,20 @@ import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * <p>客户端端加密信息的编码器</p>
+ */
 public class ClientSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> {
+    /**
+     * <p>会话</p>
+     */
     private final ClientSession session;
 
+    /**
+     * <p>指定会话</p>
+     *
+     * @param session 会话
+     */
     public ClientSecureTunnelEncoder(ClientSession session) {
         this.session = session;
     }
