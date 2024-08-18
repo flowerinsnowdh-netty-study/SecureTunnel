@@ -133,11 +133,6 @@ public abstract class CipherUtils {
          */
         private GCM() {
         }
-
-        /**
-         * <p>默认 GCM 验证块大小</p>
-         */
-        public static final int TLEN = 96;
     }
 
     /**

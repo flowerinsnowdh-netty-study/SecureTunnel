@@ -3,7 +3,6 @@ package online.flowerinsnow.securetunnel.network.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import online.flowerinsnow.securetunnel.exception.UnexpectedException;
 import online.flowerinsnow.securetunnel.exception.UnknownPacketException;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
 import online.flowerinsnow.securetunnel.network.packet.PacketList;
@@ -52,13 +51,7 @@ public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        SecretKeySpec sharedSecretKey;
-        synchronized (this.session.sharedSecretKeyLock) {
-            if ((sharedSecretKey = this.session.getSharedSecretKey()) == null) { // 握手完毕，但没有生成共享安全密钥，属于意外情况
-                throw new UnexpectedException();
-            }
-        }
-
+        SecretKeySpec sharedSecretKey = this.session.getSharedSecretKey();
         byte[] c2sGCMParameter = this.session.getC2SGCMParameter();
         if (c2sGCMParameter == null) { // 共享安全密钥生成完毕，还没有发送C2SGCMParameter
             byte[] data = BufUtils.readAll(in); // 数据包内容
@@ -73,11 +66,11 @@ public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        // 所有准备已做好，正常解密
+        // 解密已就绪，正常解密
         byte[] data = BufUtils.readAll(in); // 数据包内容
         // 解密数据包内容
         Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_ECB_PKCS7PADDING)
-                .init(Cipher.DECRYPT_MODE, sharedSecretKey, new GCMParameterSpec(CipherUtils.GCM.TLEN, c2sGCMParameter))
+                .init(Cipher.DECRYPT_MODE, sharedSecretKey, new GCMParameterSpec(96, c2sGCMParameter))
                 .get();
         ByteBuf buf = BufUtils.fromDecrypt(ctx.alloc(), data, cipher); // 解密结果
         this.createPacket(buf, out);

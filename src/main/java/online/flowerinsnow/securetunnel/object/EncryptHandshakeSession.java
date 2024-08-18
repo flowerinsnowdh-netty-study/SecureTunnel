@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class EncryptHandshakeSession {
-    public final Object sharedSecretKeyLock = new Object();
-
     protected PublicKey clientPublicKey;
     protected PublicKey serverPublicKey;
 
