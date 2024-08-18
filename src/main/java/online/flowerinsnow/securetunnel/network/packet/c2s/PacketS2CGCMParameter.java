@@ -11,7 +11,7 @@ import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
  */
 @PacketInfo(
         id = 0x04,
-        side = PacketSide.SERVER_TO_CLIENT
+        side = PacketSide.CLIENT_TO_SERVER
 )
 public class PacketS2CGCMParameter extends PacketBase {
     /**
