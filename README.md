@@ -15,10 +15,10 @@
 8.  (S)    通过客户端临时公钥、服务器临时私钥合成共享安全密钥
 9.  (C)    通过服务器临时公钥、客户端临时私钥合成共享安全密钥
 10. (S)    生成C2S GCM参数 (128位)，并通过共享安全密钥加密 (AES/ECB/PKCS7Padding)
-11. (S->C) 发送加密后的C2S GCM参数 (0x03 S2CGCMParameter)
+11. (S->C) 发送加密后的C2S GCM参数 (0x03 C2SGCMParameter)
 12. (C<-S) 接收并解密C2S GCM参数
 13. (C)    生成S2C GCM参数 (128位)，并通过共享安全密钥与C2S GCM参数加密 (AES/GCM/NoPadding tLen=96)
-14. (C->S) 发送加密后的S2C GCM参数 (0x04 C2SGCMParameter)
+14. (C->S) 发送加密后的S2C GCM参数 (0x04 S2CGCMParameter)
 15. (S<-C) 接收并解密加密后的S2C GCM参数
 16. (C/S)  从现在开始通信内容内容均使用共享安全密钥和对应GCM参数加解密 (AES/GCM/NoPadding tLen=96)
 17. (S->C) 发送服务器 Host 公钥 (EC 256)

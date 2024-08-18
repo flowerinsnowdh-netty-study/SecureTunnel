@@ -1,4 +1,4 @@
-package online.flowerinsnow.securetunnel.network.packet.c2s;
+package online.flowerinsnow.securetunnel.network.packet.s2c;
 
 import io.netty.buffer.ByteBuf;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
@@ -7,22 +7,22 @@ import online.flowerinsnow.securetunnel.network.packet.PacketSide;
 import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
 
 /**
- * <p>S2C GCM 参数</p>
+ * <p>C2S GCM 参数</p>
  */
 @PacketInfo(
-        id = 0x04,
+        id = 0x03,
         side = PacketSide.SERVER_TO_CLIENT
 )
-public class PacketS2CGCMParameter extends PacketBase {
+public class PacketC2SGCMParameter extends PacketBase {
     /**
      * <p>客户端发往服务器的 GCM 参数</p>
      */
-    private byte[] s2cGCMParameter;
+    private byte[] c2sGCMParameter;
 
     /**
      * <p>创建一个空对象</p>
      */
-    public PacketS2CGCMParameter() {
+    public PacketC2SGCMParameter() {
     }
 
     /**
@@ -30,8 +30,8 @@ public class PacketS2CGCMParameter extends PacketBase {
      *
      * @param c2sGCMParameter 客户端发往服务器的 GCM 参数
      */
-    public PacketS2CGCMParameter(byte[] c2sGCMParameter) {
-        this.s2cGCMParameter = c2sGCMParameter;
+    public PacketC2SGCMParameter(byte[] c2sGCMParameter) {
+        this.c2sGCMParameter = c2sGCMParameter;
     }
 
     /**
@@ -39,26 +39,26 @@ public class PacketS2CGCMParameter extends PacketBase {
      *
      * @return 客户端发往服务器的 GCM 参数
      */
-    public byte[] getS2CGCMParameter() {
-        return this.s2cGCMParameter;
+    public byte[] getC2SGCMParameter() {
+        return this.c2sGCMParameter;
     }
 
     /**
      * <p>设置客户端发往服务器的 GCM 参数</p>
      *
-     * @param s2cGCMParameter 客户端发往服务器的 GCM 参数
+     * @param c2sGCMParameter 客户端发往服务器的 GCM 参数
      */
-    public void setS2CGCMParameter(byte[] s2cGCMParameter) {
-        this.s2cGCMParameter = s2cGCMParameter;
+    public void setC2SGCMParameter(byte[] c2sGCMParameter) {
+        this.c2sGCMParameter = c2sGCMParameter;
     }
 
     @Override
     public void read(ByteBuf buf) {
-        this.s2cGCMParameter = BufUtils.readAll(buf);
+        this.c2sGCMParameter = BufUtils.readAll(buf);
     }
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeBytes(this.s2cGCMParameter);
+        buf.writeBytes(this.c2sGCMParameter);
     }
 }
