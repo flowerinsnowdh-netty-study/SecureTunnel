@@ -3,16 +3,34 @@ package online.flowerinsnow.securetunnel.object;
 import java.security.PrivateKey;
 import java.util.Objects;
 
+/**
+ * <p>客户端通信会话</p>
+ */
 public class ClientEncryptSession extends EncryptHandshakeSession {
+    /**
+     * <p>客户端临时私钥，客户端独有</p>
+     */
     private PrivateKey clientPrivateKey;
 
+    /**
+     * <p>开放构造方法，允许实例化</p>
+     */
     public ClientEncryptSession() {
     }
 
+    /**
+     * <p>获取客户端临时私钥</p>
+     *
+     * @return 客户端临时私钥
+     */
     public synchronized PrivateKey getClientPrivateKey() {
         return this.clientPrivateKey;
     }
 
+    /**
+     * <p>设置客户端临时私钥</p>
+     * @param clientPrivateKey 客户端临时私钥
+     */
     public synchronized void setClientPrivateKey(PrivateKey clientPrivateKey) {
         this.clientPrivateKey = clientPrivateKey;
     }
