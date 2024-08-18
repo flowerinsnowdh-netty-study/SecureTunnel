@@ -1,6 +1,9 @@
-package online.flowerinsnow.securetunnel.network.packet;
+package online.flowerinsnow.securetunnel.network.packet.s2c;
 
 import io.netty.buffer.ByteBuf;
+import online.flowerinsnow.securetunnel.network.packet.PacketBase;
+import online.flowerinsnow.securetunnel.network.packet.PacketInfo;
+import online.flowerinsnow.securetunnel.network.packet.PacketSide;
 import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
 
