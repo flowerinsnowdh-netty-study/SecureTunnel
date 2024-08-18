@@ -60,18 +60,6 @@ public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
 
         SecretKeySpec sharedSecretKey = this.session.getSharedSecretKey();
         byte[] c2sGCMParameter = this.session.getC2SGCMParameter();
-        if (c2sGCMParameter == null) { // 共享安全密钥生成完毕，还没有发送C2SGCMParameter
-            byte[] data = BufUtils.readAll(in); // 数据包内容
-            // 解密数据包内容
-            Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_ECB_PKCS7PADDING)
-                    .init(Cipher.DECRYPT_MODE, sharedSecretKey)
-                    .get();
-
-            ByteBuf buf = BufUtils.fromDecrypt(ctx.alloc(), data, cipher); // 解密结果
-            this.createPacket(buf, out);
-            buf.release();
-            return;
-        }
 
         this.session.updateC2SGCMParameter();
         // 解密已就绪，正常解密

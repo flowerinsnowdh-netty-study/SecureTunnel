@@ -47,19 +47,6 @@ public class ClientSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> 
         }
 
         byte[] c2sGCMParameter = this.session.getC2SGCMParameter();
-        if (c2sGCMParameter == null) { // 共享安全密钥生成完毕，还没有收到S2CGCMParameter
-            Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_ECB_PKCS7PADDING)
-                    .init(Cipher.ENCRYPT_MODE, sharedSecretKey)
-                    .get();
-            byte[] data = BufUtils.readAll(buf);
-            buf.release();
-
-            byte[] result = cipher.doFinal(data);
-            out.writeShort(result.length);
-            out.writeBytes(result);
-            return;
-        }
-
         this.session.updateC2SGCMParameter();
         // 加密已就绪，正常加密
         Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_GCM)
