@@ -11,21 +11,31 @@ import online.flowerinsnow.securetunnel.object.ServerEncryptSession;
 import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
 import online.flowerinsnow.securetunnel.util.cipher.CipherBuilder;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.KeyPair;
 import java.util.List;
+import java.util.Objects;
 
-
+/**
+ * <p>服务器端解密信息的解码器</p>
+ */
 public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
-    private final ServerEncryptSession session;
-    private final PacketList packetList;
+    @NotNull private final ServerEncryptSession session;
+    @NotNull private final PacketList packetList;
 
-    public ServerSecureTunnelDecoder(ServerEncryptSession session, PacketList packetList) {
-        this.session = session;
-        this.packetList = packetList;
+    /**
+     * <p>指定会话和数据包类型列表</p>
+     *
+     * @param session 会话
+     * @param packetList 数据包类型列表
+     */
+    public ServerSecureTunnelDecoder(@NotNull ServerEncryptSession session, @NotNull PacketList packetList) {
+        this.session = Objects.requireNonNull(session);
+        this.packetList = Objects.requireNonNull(packetList);
     }
 
     @Override
