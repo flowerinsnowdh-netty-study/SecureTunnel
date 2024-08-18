@@ -66,6 +66,7 @@ public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
             return;
         }
 
+        this.session.updateC2SGCMParameter();
         // 解密已就绪，正常解密
         byte[] data = BufUtils.readAll(in); // 数据包内容
         // 解密数据包内容
