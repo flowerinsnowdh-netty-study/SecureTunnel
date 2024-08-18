@@ -3,16 +3,16 @@ package online.flowerinsnow.securetunnel.network.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import online.flowerinsnow.securetunnel.exception.UnexpectedException;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
 import online.flowerinsnow.securetunnel.object.ClientSession;
+import online.flowerinsnow.securetunnel.object.DefaultGCMParamSpec;
+import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
+import online.flowerinsnow.securetunnel.util.cipher.CipherBuilder;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
 
 import javax.crypto.Cipher;
-import javax.crypto.spec.GCMParameterSpec;
-import java.security.KeyPair;
+import javax.crypto.spec.SecretKeySpec;
 
-// TODO 需要重构
 public class ClientSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> {
     private final ClientSession session;
 
@@ -22,54 +22,48 @@ public class ClientSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> 
 
     @Override
     protected void encode(ChannelHandlerContext ctx, PacketBase msg, ByteBuf out) throws Exception {
-        ByteBuf buf = ctx.alloc().buffer(256, 1024 + Short.BYTES);
-        buf.writeByte(msg.getID());
-        msg.write(buf);
-        if (this.session.getClientPrivateKey() == null) {
-            KeyPair keyPair = CipherUtils.genECKeyPair();
-            this.session.setClientPrivateKey(keyPair.getPrivate());
-            this.session.setClientPublicKey(keyPair.getPublic());
-            out.writeShort(buf.readableBytes());
+        // 先将原始数据写好
+        ByteBuf buf = ctx.alloc().buffer(256, 1024); // 1024 字节是数据包内容的上限
+        buf.writeByte(msg.getID()); // 数据包类型 ID
+        msg.write(buf); // 将数据包内容写入数据
+
+        SecretKeySpec sharedSecretKey = this.session.getSharedSecretKey();
+        if (sharedSecretKey == null) { // 共享安全密钥还未合成，加密还未开始
+            out.writeByte(buf.readableBytes());
             out.writeBytes(buf);
             buf.release();
             return;
         }
-        if (this.session.getServerPublicKey() == null) {
-            out.writeShort(buf.readableBytes());
-            out.writeBytes(buf);
+
+        byte[] c2sGCMParameter = this.session.getC2SGCMParameter();
+        if (c2sGCMParameter == null) { // 共享安全密钥生成完毕，还没有收到S2CGCMParameter
+            Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_ECB_PKCS7PADDING)
+                    .init(Cipher.ENCRYPT_MODE, sharedSecretKey)
+                    .get();
+            byte[] data = BufUtils.readAll(buf);
             buf.release();
+
+            byte[] result = cipher.doFinal(data);
+            out.writeShort(result.length);
+            out.writeBytes(result);
             return;
         }
-        boolean flag;
-        synchronized (this.session.sharedSecretKeyLock) {
-            flag = this.session.getSharedSecretKey() == null;
-        }
-        if (flag) {
-            throw new UnexpectedException();
-        }
-        if (this.session.getC2SGCMParameter() == null) {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, this.session.getSharedSecretKey());
-            byte[] bytes = new byte[buf.readableBytes()];
-            buf.readBytes(bytes);
-            buf.release();
-            byte[] encrypted = cipher.doFinal(bytes);
-            out.writeShort(encrypted.length);
-            out.writeBytes(encrypted);
-            return;
-        }
-        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        cipher.init(Cipher.ENCRYPT_MODE, this.session.getSharedSecretKey(), new GCMParameterSpec(96, this.session.getC2SGCMParameter()));
-        byte[] bytes = new byte[buf.readableBytes()];
-        buf.readBytes(bytes);
+
+        this.session.updateC2SGCMParameter();
+        // 加密已就绪，正常加密
+        Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_GCM)
+                .init(Cipher.ENCRYPT_MODE, sharedSecretKey, new DefaultGCMParamSpec(c2sGCMParameter))
+                .get();
+        byte[] data = BufUtils.readAll(buf);
         buf.release();
-        byte[] encrypted = cipher.doFinal(bytes);
-        out.writeShort(encrypted.length);
-        out.writeBytes(encrypted);
+
+        byte[] result = cipher.doFinal(data);
+        out.writeShort(result.length);
+        out.writeBytes(result);
     }
 
     @Override
-    protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, PacketBase msg, boolean preferDirect) throws Exception {
+    protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, PacketBase msg, boolean preferDirect) {
         if (preferDirect) {
             return ctx.alloc().directBuffer(256, 1024 + 12 + Short.BYTES);
         } else {

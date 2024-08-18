@@ -40,7 +40,7 @@ public class ClientSecureTunnelDecoder extends ByteToMessageDecoder {
         }
 
         byte[] s2cGCMParameter = this.session.getS2CGCMParameter();
-        if (s2cGCMParameter == null) { // 共享安全密钥生成完毕，还没有发送C2SGCMParameter
+        if (s2cGCMParameter == null) { // 共享安全密钥生成完毕，还没有发送S2CGCMParameter
             byte[] data = BufUtils.readAll(in); // 数据包内容
             // 解密数据包内容
             Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_ECB_PKCS7PADDING)
