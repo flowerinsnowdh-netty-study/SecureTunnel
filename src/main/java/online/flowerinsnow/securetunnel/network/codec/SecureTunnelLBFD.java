@@ -2,7 +2,13 @@ package online.flowerinsnow.securetunnel.network.codec;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
+/**
+ * <p>固定长度的 {@link LengthFieldBasedFrameDecoder}</p>
+ */
 public class SecureTunnelLBFD extends LengthFieldBasedFrameDecoder {
+    /**
+     * <p>Creates a new instance.</p>
+     */
     public SecureTunnelLBFD() {
         /*
         1024 (base)
