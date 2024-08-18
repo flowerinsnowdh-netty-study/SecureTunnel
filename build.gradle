@@ -1,0 +1,25 @@
+plugins() {
+    id('java')
+}
+
+group = 'online.flowerinsnow.securetunnel'
+version = '1.0.0-SNAPSHOT'
+
+repositories() {
+    mavenCentral()
+}
+
+dependencies() {
+    implementation("io.netty:netty-handler:${version_netty}")
+//    implementation("io.netty:netty-all:${version_netty}")
+
+    implementation('org.bouncycastle:bcprov-jdk18on:1.78.1')
+    implementation('org.jetbrains:annotations:24.1.0')
+
+    testImplementation(platform("org.junit:junit-bom:${version_junit_bom}"))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+test() {
+    useJUnitPlatform()
+}
