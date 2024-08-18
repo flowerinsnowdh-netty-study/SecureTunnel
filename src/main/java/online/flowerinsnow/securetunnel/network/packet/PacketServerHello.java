@@ -1,28 +1,44 @@
 package online.flowerinsnow.securetunnel.network.packet;
 
 import io.netty.buffer.ByteBuf;
+import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
-@PacketInfo(id = 0x02, side = PacketSide.SERVER_TO_CLIENT)
+/**
+ * <p>Server Hello 数据包</p>
+ */
+@PacketInfo(
+        id = 0x02,
+        side = PacketSide.SERVER_TO_CLIENT
+)
 public class PacketServerHello extends PacketBase {
+    /**
+     * <p>服务器临时公钥</p>
+     */
     private PublicKey tempServerPublicKey;
 
+    /**
+     * <p>创建一个空对象</p>
+     */
     public PacketServerHello() {
     }
 
+    /**
+     * <p>指定服务器临时公钥</p>
+     *
+     * @param tempServerPublicKey 服务器临时公钥
+     */
     public PacketServerHello(PublicKey tempServerPublicKey) {
         this.tempServerPublicKey = tempServerPublicKey;
     }
 
     @Override
-    public void read(ByteBuf buf) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] bytes = new byte[buf.readableBytes()];
-        buf.readBytes(bytes);
-        this.tempServerPublicKey = CipherUtils.ecPublicKeyFromEncoded(bytes);
+    public void read(ByteBuf buf) throws InvalidKeySpecException {
+        byte[] data = BufUtils.readAll(buf);
+        this.tempServerPublicKey = CipherUtils.EC.deserializePublic(data);
     }
 
     @Override
