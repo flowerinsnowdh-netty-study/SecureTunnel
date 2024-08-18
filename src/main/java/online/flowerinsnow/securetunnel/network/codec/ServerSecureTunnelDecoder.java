@@ -92,7 +92,10 @@ public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
      * @param out 输出集合
      * @throws Exception 解析时抛出的任何异常
      */
-    private void createPacket(ByteBuf in, List<Object> out) throws Exception {
+    private void createPacket(@NotNull ByteBuf in, @NotNull List<Object> out) throws Exception {
+        Objects.requireNonNull(in);
+        Objects.requireNonNull(out);
+
         byte packetID = in.readByte(); // 读取 ID
         Class<? extends PacketBase> type = this.packetList.get(packetID); // 获取类型
         if (type == null) { // 未知数据包类型
