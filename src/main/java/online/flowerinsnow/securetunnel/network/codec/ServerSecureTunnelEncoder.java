@@ -57,6 +57,7 @@ public class ServerSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> 
             return;
         }
 
+        this.session.updateS2CGCMParameter();
         // 加密已就绪，正常加密
         Cipher cipher = new CipherBuilder(CipherUtils.AES.AES_GCM)
                 .init(Cipher.ENCRYPT_MODE, sharedSecretKey, new DefaultGCMParamSpec(s2cGCMParameter))
