@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
 import online.flowerinsnow.securetunnel.object.DefaultGCMParamSpec;
-import online.flowerinsnow.securetunnel.object.ServerEncryptSession;
+import online.flowerinsnow.securetunnel.object.ServerSession;
 import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
 import online.flowerinsnow.securetunnel.util.cipher.CipherBuilder;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
@@ -17,14 +17,14 @@ import javax.crypto.spec.SecretKeySpec;
  * <p>服务器端加密信息的编码器</p>
  */
 public class ServerSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> {
-    private final ServerEncryptSession session;
+    private final ServerSession session;
 
     /**
      * <p>指定会话</p>
      *
      * @param session 会话
      */
-    public ServerSecureTunnelEncoder(ServerEncryptSession session) {
+    public ServerSecureTunnelEncoder(ServerSession session) {
         this.session = session;
     }
 

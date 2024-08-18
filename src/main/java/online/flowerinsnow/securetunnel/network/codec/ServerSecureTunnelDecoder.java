@@ -6,7 +6,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import online.flowerinsnow.securetunnel.exception.UnknownPacketException;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
 import online.flowerinsnow.securetunnel.network.packet.PacketList;
-import online.flowerinsnow.securetunnel.object.ServerEncryptSession;
+import online.flowerinsnow.securetunnel.object.ServerSession;
 import online.flowerinsnow.securetunnel.util.buffer.BufUtils;
 import online.flowerinsnow.securetunnel.util.cipher.CipherBuilder;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
@@ -23,7 +23,7 @@ import java.util.Objects;
  * <p>服务器端解密信息的解码器</p>
  */
 public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
-    @NotNull private final ServerEncryptSession session;
+    @NotNull private final ServerSession session;
     @NotNull private final PacketList packetList;
 
     /**
@@ -32,7 +32,7 @@ public class ServerSecureTunnelDecoder extends ByteToMessageDecoder {
      * @param session 会话
      * @param packetList 数据包类型列表
      */
-    public ServerSecureTunnelDecoder(@NotNull ServerEncryptSession session, @NotNull PacketList packetList) {
+    public ServerSecureTunnelDecoder(@NotNull ServerSession session, @NotNull PacketList packetList) {
         this.session = Objects.requireNonNull(session);
         this.packetList = Objects.requireNonNull(packetList);
     }

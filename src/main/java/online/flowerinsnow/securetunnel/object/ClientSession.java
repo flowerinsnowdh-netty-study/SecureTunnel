@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * <p>客户端通信会话</p>
  */
-public class ClientEncryptSession extends EncryptHandshakeSession {
+public class ClientSession extends ApplicationSession {
     /**
      * <p>客户端临时私钥，客户端独有</p>
      */
@@ -15,7 +15,7 @@ public class ClientEncryptSession extends EncryptHandshakeSession {
     /**
      * <p>开放构造方法，允许实例化</p>
      */
-    public ClientEncryptSession() {
+    public ClientSession() {
     }
 
     /**
@@ -40,7 +40,7 @@ public class ClientEncryptSession extends EncryptHandshakeSession {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ClientEncryptSession that = (ClientEncryptSession) o;
+        ClientSession that = (ClientSession) o;
         return Objects.equals(this.clientPrivateKey, that.clientPrivateKey);
     }
 
@@ -54,7 +54,7 @@ public class ClientEncryptSession extends EncryptHandshakeSession {
 
     @Override
     public String toString() {
-        return ClientEncryptSession.class.getSimpleName() + "{" +
+        return ClientSession.class.getSimpleName() + "{" +
                 "super=" + super.toString() +
                 ", clientPrivateKey=" + this.clientPrivateKey +
                 '}';

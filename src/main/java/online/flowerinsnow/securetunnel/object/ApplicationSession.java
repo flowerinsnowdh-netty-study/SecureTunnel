@@ -11,7 +11,7 @@ import java.util.Objects;
  * <p>通信会话</p>
  * <p>线程安全类</p>
  */
-public class EncryptHandshakeSession {
+public class ApplicationSession {
     /**
      * <p>客户端临时公钥</p>
      */
@@ -37,7 +37,7 @@ public class EncryptHandshakeSession {
     /**
      * <p>封锁构造方法，只允许从子类实例化</p>
      */
-    protected EncryptHandshakeSession() {
+    protected ApplicationSession() {
     }
 
     /**
@@ -146,7 +146,7 @@ public class EncryptHandshakeSession {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EncryptHandshakeSession that = (EncryptHandshakeSession) o;
+        ApplicationSession that = (ApplicationSession) o;
         return Objects.equals(this.clientPublicKey, that.clientPublicKey) && Objects.equals(this.serverPublicKey, that.serverPublicKey) && Objects.equals(this.sharedSecretKey, that.sharedSecretKey) && Arrays.equals(this.c2sGCMParameter, that.c2sGCMParameter) && Arrays.equals(this.s2cGCMParameter, that.s2cGCMParameter);
     }
 
@@ -163,7 +163,7 @@ public class EncryptHandshakeSession {
 
     @Override
     public String toString() {
-        return EncryptHandshakeSession.class.getSimpleName() + "{" +
+        return ApplicationSession.class.getSimpleName() + "{" +
                 "clientPublicKey=" + this.clientPublicKey +
                 ", serverPublicKey=" + this.serverPublicKey +
                 ", sharedSecretKey=" + this.sharedSecretKey +

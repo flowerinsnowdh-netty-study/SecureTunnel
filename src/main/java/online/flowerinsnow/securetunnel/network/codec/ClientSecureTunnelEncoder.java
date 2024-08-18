@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import online.flowerinsnow.securetunnel.exception.UnexpectedException;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
-import online.flowerinsnow.securetunnel.object.ClientEncryptSession;
+import online.flowerinsnow.securetunnel.object.ClientSession;
 import online.flowerinsnow.securetunnel.util.cipher.CipherUtils;
 
 import javax.crypto.Cipher;
@@ -14,9 +14,9 @@ import java.security.KeyPair;
 
 // TODO 需要重构
 public class ClientSecureTunnelEncoder extends MessageToByteEncoder<PacketBase> {
-    private final ClientEncryptSession session;
+    private final ClientSession session;
 
-    public ClientSecureTunnelEncoder(ClientEncryptSession session) {
+    public ClientSecureTunnelEncoder(ClientSession session) {
         this.session = session;
     }
 

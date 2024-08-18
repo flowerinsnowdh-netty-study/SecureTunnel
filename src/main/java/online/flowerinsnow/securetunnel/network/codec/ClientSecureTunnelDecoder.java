@@ -7,7 +7,7 @@ import online.flowerinsnow.securetunnel.exception.UnexpectedException;
 import online.flowerinsnow.securetunnel.exception.UnknownPacketException;
 import online.flowerinsnow.securetunnel.network.packet.PacketBase;
 import online.flowerinsnow.securetunnel.network.packet.PacketList;
-import online.flowerinsnow.securetunnel.object.ClientEncryptSession;
+import online.flowerinsnow.securetunnel.object.ClientSession;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
@@ -16,10 +16,10 @@ import java.util.List;
 
 // TODO 需要重构
 public class ClientSecureTunnelDecoder extends ByteToMessageDecoder {
-    private final ClientEncryptSession session;
+    private final ClientSession session;
     private final PacketList packetList;
 
-    public ClientSecureTunnelDecoder(ClientEncryptSession session, PacketList packetList) {
+    public ClientSecureTunnelDecoder(ClientSession session, PacketList packetList) {
         this.session = session;
         this.packetList = packetList;
     }
